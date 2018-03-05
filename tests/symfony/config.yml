@@ -1,0 +1,29 @@
+framework:
+    secret: test
+    session:
+        storage_id: session.storage.mock_file
+
+monolog:
+    handlers:
+        main:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        memory: true
+    orm:
+        connection: default
+        auto_generate_proxy_classes: true
+        mappings:
+            Dummy:
+                type: annotation
+                dir: '%kernel.root_dir%/Entity'
+                prefix: Paysera\Tests\Entity
+                is_bundle: false
+
+paysera_database_init:
+    directories:
+        sql: '%kernel.root_dir%/sql'
+        fixtures: '%kernel.root_dir%/Fixtures'
