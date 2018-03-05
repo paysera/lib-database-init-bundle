@@ -1,0 +1,4 @@
+/vendor/
+composer.lock
+/tests/symfony/cache/
+/tests/symfony/logs/
