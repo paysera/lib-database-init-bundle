@@ -61,6 +61,6 @@ class DatabaseInitializerTest extends BundleTestCase
         $this->assertEquals(2, $countPlain);
 
         $countManaged = $this->entityManager->getRepository(Dummy::class)->findAll();
-        $this->assertEquals(2, $countManaged);
+        $this->assertEquals(2, count($countManaged));
     }
 }
