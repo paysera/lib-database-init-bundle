@@ -1,4 +1,4 @@
-lib-database-init-bundle
+lib-database-init-bundle ![](https://travis-ci.org/paysera/lib-database-init-bundle.svg?branch=master)
 ========================
 
 Initializes your database to needed state.
