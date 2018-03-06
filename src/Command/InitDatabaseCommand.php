@@ -2,6 +2,7 @@
 
 namespace Paysera\Bundle\DatabaseInitBundle\Command;
 
+use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationMessage;
 use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseInitializer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,6 +28,20 @@ class InitDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->initializer->initialize();
+        $reports = $this->initializer->initialize();
+
+        foreach ($reports as $report) {
+            foreach ($report->getMessages() as $message) {
+                $text = sprintf('<info>%s</info>: ', $report->getInitializer());
+                if ($message->getType() === InitializationMessage::TYPE_INFO) {
+                    $text .= $message->getMessage();
+                } elseif ($message->getType() === InitializationMessage::TYPE_SUCCESS) {
+                    $text .= sprintf('<comment>%s</comment>', $message->getMessage());
+                } elseif ($message->getType() === InitializationMessage::TYPE_ERROR) {
+                    $text .= sprintf('<error>%s</error>', $message->getMessage());
+                }
+                $output->writeln($text);
+            }
+        }
     }
 }

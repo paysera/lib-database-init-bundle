@@ -8,6 +8,7 @@
         <service id="paysera_database_init.initializer.sql"
                  class="Paysera\Bundle\DatabaseInitBundle\Service\Initializer\SqlInitializer">
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="logger"/>
             <argument>%paysera_database_init.directory.sql%</argument>
 
             <tag name="paysera_database_init.initializer" priority="100"/>

@@ -4,6 +4,8 @@ namespace Paysera\Bundle\DatabaseInitBundle\Service\Initializer;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
+use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationMessage;
+use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
 
 class FixturesInitializer implements DatabaseInitializerInterface
 {
@@ -29,13 +31,30 @@ class FixturesInitializer implements DatabaseInitializerInterface
     public function initialize()
     {
         if ($this->fixturesDirectory === null) {
-            return;
+            return null;
         }
+
+        $messages = [];
 
         $this->loader->loadFromDirectory($this->fixturesDirectory);
         $fixtures = $this->loader->getFixtures();
+
         if (count($fixtures) > 0) {
             $this->executor->execute($fixtures);
+
+            foreach ($fixtures as $fixture) {
+                $message = new InitializationMessage();
+                $messages[] = $message
+                    ->setType(InitializationMessage::TYPE_SUCCESS)
+                    ->setMessage(get_class($fixture))
+                ;
+            }
         }
+
+        $report = new InitializationReport();
+        return $report
+            ->setMessages($messages)
+            ->setInitializer('Fixtures')
+        ;
     }
 }

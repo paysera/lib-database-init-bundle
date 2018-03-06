@@ -2,6 +2,7 @@
 
 namespace Paysera\Bundle\DatabaseInitBundle\Service;
 
+use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
 use Paysera\Bundle\DatabaseInitBundle\Service\Initializer\DatabaseInitializerInterface;
 use SplPriorityQueue;
 
@@ -26,10 +27,16 @@ class DatabaseInitializer
         $this->initializers->insert($initializer, $priority);
     }
 
+    /**
+     * @return InitializationReport[]
+     */
     public function initialize()
     {
+        $reports = [];
         foreach ($this->initializers as $initializer) {
-            $initializer->initialize();
+            $reports[] = $initializer->initialize();
         }
+
+        return array_filter($reports);
     }
 }

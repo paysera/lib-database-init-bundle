@@ -55,7 +55,15 @@ class DatabaseInitializerTest extends BundleTestCase
 
     public function testDatabaseInitializer()
     {
-        $this->databaseInitializer->initialize();
+        $reports = $this->databaseInitializer->initialize();
+
+        $this->assertCount(2, $reports);
+
+        $sqlReport = $reports[0];
+        $fixtureReport = $reports[1];
+
+        $this->assertCount(3, $sqlReport->getMessages());
+        $this->assertCount(1, $fixtureReport->getMessages());
 
         $countPlain = $this->connection->query('SELECT count(*) FROM table_1;')->fetchColumn();
         $this->assertEquals(2, $countPlain);
