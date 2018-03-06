@@ -34,7 +34,7 @@ class SqlInitializer implements DatabaseInitializerInterface
 
     public function getName()
     {
-        return 'SQL';
+        return 'sql';
     }
 
     public function initialize()

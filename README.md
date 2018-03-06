@@ -41,8 +41,8 @@ Be aware that migrations should be executed before applying fixtures.
 `bin/console paysera:db-init:init {initializer}`
 * `initializer` - optional name of single initializer to run.
 * List of provided initializers:
-  - `SQL`
-  - `Fixtures`
+  - `sql`
+  - `fixtures`
 
 
 #### Extension

@@ -30,7 +30,7 @@ class FixturesInitializer implements DatabaseInitializerInterface
 
     public function getName()
     {
-        return 'Fixtures';
+        return 'fixtures';
     }
 
     public function initialize()
