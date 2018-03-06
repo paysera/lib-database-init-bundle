@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('directories')
+                ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('sql')->defaultNull()->end()
                         ->scalarNode('fixtures')->defaultNull()->end()
