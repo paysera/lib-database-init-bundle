@@ -55,6 +55,8 @@ class SqlInitializer implements DatabaseInitializerInterface
         /** @var \SplFileInfo $item */
         foreach ($finder as $item) {
             $contents = file_get_contents($item->getRealPath());
+            $contents = preg_replace('#;\s+$#m', ';', $contents);
+
             foreach (explode(";\n", $contents) as $query) {
                 $query = trim($query);
                 if (strlen($query) === 0) {
