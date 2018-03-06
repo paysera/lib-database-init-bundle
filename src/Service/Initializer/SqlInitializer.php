@@ -103,7 +103,7 @@ class SqlInitializer implements DatabaseInitializerInterface
     {
         $message = new InitializationMessage();
 
-        if (preg_match('#duplicate key name \'(\w+)\'#i', $exception->getMessage(), $matches) !== false) {
+        if (preg_match('#duplicate key name \'([\w-]+)\'#i', $exception->getMessage(), $matches) !== false) {
             return $message
                 ->setType(InitializationMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate index "%s"', $matches[1]))
