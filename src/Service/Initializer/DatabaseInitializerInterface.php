@@ -10,4 +10,9 @@ interface DatabaseInitializerInterface
      * @return InitializationReport|null
      */
     public function initialize();
+
+    /**
+     * @return string
+     */
+    public function getName();
 }

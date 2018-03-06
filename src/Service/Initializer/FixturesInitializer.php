@@ -28,6 +28,11 @@ class FixturesInitializer implements DatabaseInitializerInterface
         $this->fixturesDirectory = $fixturesDirectory;
     }
 
+    public function getName()
+    {
+        return 'Fixtures';
+    }
+
     public function initialize()
     {
         if ($this->fixturesDirectory === null) {
@@ -54,7 +59,7 @@ class FixturesInitializer implements DatabaseInitializerInterface
         $report = new InitializationReport();
         return $report
             ->setMessages($messages)
-            ->setInitializer('Fixtures')
+            ->setInitializer($this->getName())
         ;
     }
 }

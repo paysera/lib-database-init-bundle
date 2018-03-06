@@ -32,6 +32,11 @@ class SqlInitializer implements DatabaseInitializerInterface
         $this->sqlDirectory = $sqlDirectory;
     }
 
+    public function getName()
+    {
+        return 'SQL';
+    }
+
     public function initialize()
     {
         if ($this->sqlDirectory === null) {
@@ -72,7 +77,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         $report = new InitializationReport();
         return $report
             ->setMessages($messages)
-            ->setInitializer('SQL')
+            ->setInitializer($this->getName())
         ;
     }
 

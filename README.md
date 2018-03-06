@@ -38,7 +38,11 @@ Will load all fixtures in given directory to database.
 Be aware that migrations should be executed before applying fixtures.
 
 #### Run
-`bin/console paysera:db-init:init`
+`bin/console paysera:db-init:init {initializer}`
+* `initializer` - optional name of single initializer to run.
+* List of provided initializers:
+  - `SQL`
+  - `Fixtures`
 
 
 #### Extension

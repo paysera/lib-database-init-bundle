@@ -5,6 +5,7 @@ namespace Paysera\Bundle\DatabaseInitBundle\Command;
 use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationMessage;
 use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseInitializer;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,13 +23,14 @@ class InitDatabaseCommand extends Command
     {
         $this
             ->setName('paysera:db-init:init')
+            ->addArgument('initializer', InputArgument::OPTIONAL, 'Specific single initializer to run')
             ->setDescription('Initialize Database')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $reports = $this->initializer->initialize();
+        $reports = $this->initializer->initialize($input->getArgument('initializer'));
 
         foreach ($reports as $report) {
             foreach ($report->getMessages() as $message) {

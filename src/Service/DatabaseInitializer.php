@@ -28,13 +28,20 @@ class DatabaseInitializer
     }
 
     /**
+     * @param string|null $initializerName
      * @return InitializationReport[]
      */
-    public function initialize()
+    public function initialize($initializerName = null)
     {
         $reports = [];
         foreach ($this->initializers as $initializer) {
-            $reports[] = $initializer->initialize();
+            if ($initializerName !== null) {
+                if ($initializer->getName() === $initializerName) {
+                    $reports[] = $initializer->initialize();
+                }
+            } else {
+                $reports[] = $initializer->initialize();
+            }
         }
 
         return array_filter($reports);
