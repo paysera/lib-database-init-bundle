@@ -89,7 +89,10 @@ class SqlInitializer implements DatabaseInitializerInterface
     {
         $message = new InitializationMessage();
 
-        if (preg_match('#table \'(\w+)\' already exists#i', $exception->getMessage(), $matches) !== false) {
+        if (
+            preg_match('#table \'(\w+)\' already exists#i', $exception->getMessage(), $matches) !== false
+            && isset($matches[1])
+        ) {
             return $message
                 ->setType(InitializationMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate table "%s"', $matches[1]))
@@ -103,7 +106,10 @@ class SqlInitializer implements DatabaseInitializerInterface
     {
         $message = new InitializationMessage();
 
-        if (preg_match('#duplicate key name \'([\w-]+)\'#i', $exception->getMessage(), $matches) !== false) {
+        if (
+            preg_match('#duplicate key name \'([\w-]+)\'#i', $exception->getMessage(), $matches) !== false
+            && isset($matches[1])
+        ) {
             return $message
                 ->setType(InitializationMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate index "%s"', $matches[1]))
