@@ -30,7 +30,7 @@ paysera_database_init:
 ```
 - `paysera_database_init.directories.sql` (optional) - 
 Will look for `*.sql` files, split each by lines, and execute each line.
-Multi-line SQL statements currently not supported.
+Multi-line SQL statements should be separated by `;\n` characters.
 
 
 - `paysera_database_init.directories.fixtures` (optional) - 
