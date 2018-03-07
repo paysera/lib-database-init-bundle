@@ -36,18 +36,43 @@ class InitDatabaseCommand extends Command
             $input->getArgument('set')
         );
 
+        $totalFailed = 0;
+        $totalSucceeded = 0;
         foreach ($reports as $report) {
             foreach ($report->getMessages() as $message) {
-                $text = sprintf('<info>%s</info>: ', $report->getInitializer());
+                $text = null;
                 if ($message->getType() === InitializationMessage::TYPE_INFO) {
-                    $text .= $message->getMessage();
+                    $totalFailed++;
+                    if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
+                        $text = sprintf(
+                            '<info>%s</info>: <comment>%s</comment>',
+                            $report->getInitializer(),
+                            $message->getMessage()
+                        );
+                    }
                 } elseif ($message->getType() === InitializationMessage::TYPE_SUCCESS) {
-                    $text .= sprintf('<comment>%s</comment>', $message->getMessage());
-                } elseif ($message->getType() === InitializationMessage::TYPE_ERROR) {
-                    $text .= sprintf('<error>%s</error>', $message->getMessage());
+                    $totalSucceeded++;
+                    if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
+                        $text = sprintf(
+                            '<info>%s</info>: %s',
+                            $report->getInitializer(),
+                            $message->getMessage()
+                        );
+                    }
+                }
+
+                if ($message->getType() === InitializationMessage::TYPE_ERROR) {
+                    $totalFailed++;
+                    $text = sprintf(
+                        '<info>%s</info>: <error>%s</error>',
+                        $report->getInitializer(),
+                        $message->getMessage()
+                    );
                 }
                 $output->writeln($text);
             }
         }
+        $output->writeln(sprintf('Total succeeded: <info>%s</info>', $totalSucceeded));
+        $output->writeln(sprintf('Total failed: <info>%s</info>', $totalFailed));
     }
 }
