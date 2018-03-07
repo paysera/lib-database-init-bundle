@@ -25,24 +25,29 @@ In your `config_dev.yml`:
 ```yaml
 paysera_database_init:
     directories:
-        sql: '%kernel.root_dir%/Sql'
-        fixtures: '%kernel.root_dir%/Fixtures'
+        sql: 
+            initial: '%kernel.root_dir%/sql/initial'
+            additional: '%kernel.root_dir%/sql/additional'
+        fixtures: 
+            main: '%kernel.root_dir%/fixtures'
 ```
 - `paysera_database_init.directories.sql` (optional) - 
-Will look for `*.sql` files, split each by lines, and execute each line.
+Will look for `*.sql` files in given directories, split each by lines, and execute each line.
 Multi-line SQL statements should be separated by `;\n` characters.
 
 
 - `paysera_database_init.directories.fixtures` (optional) - 
-Will load all fixtures in given directory to database.
+Will load all fixtures in given directories to database.
 Be aware that migrations should be executed before applying fixtures.
 
 #### Run
-`bin/console paysera:db-init:init {initializer}`
+`bin/console paysera:db-init:init {initializer} {set}`
 * `initializer` - optional name of single initializer to run.
 * List of provided initializers:
   - `sql`
   - `fixtures`
+* `set` - optional name of given configuration, 
+i.e. `initial` or `additional` in configuration example above.
 
 
 #### Extension

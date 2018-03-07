@@ -11,21 +11,16 @@ class FixturesInitializer implements DatabaseInitializerInterface
 {
     private $loader;
     private $executor;
-    private $fixturesDirectory;
+    private $fixturesDirectories;
 
-    /**
-     * @param Loader $loader
-     * @param ORMExecutor $executor
-     * @param string|null $fixturesDirectory
-     */
     public function __construct(
         Loader $loader,
         ORMExecutor $executor,
-        $fixturesDirectory
+        array $fixturesDirectories
     ) {
         $this->loader = $loader;
         $this->executor = $executor;
-        $this->fixturesDirectory = $fixturesDirectory;
+        $this->fixturesDirectories = $fixturesDirectories;
     }
 
     public function getName()
@@ -33,16 +28,25 @@ class FixturesInitializer implements DatabaseInitializerInterface
         return 'fixtures';
     }
 
-    public function initialize()
+    public function initialize($setName)
     {
-        if ($this->fixturesDirectory === null) {
+
+        if (count($this->fixturesDirectories) === 0) {
             return null;
         }
 
         $messages = [];
 
-        $this->loader->loadFromDirectory($this->fixturesDirectory);
-        $fixtures = $this->loader->getFixtures();
+        $directories = array_values($this->fixturesDirectories);
+        if ($setName !== null && isset($this->fixturesDirectories[$setName])) {
+            $directories = [$this->fixturesDirectories[$setName]];
+        }
+
+        $fixtures = [];
+        foreach ($directories as $directory) {
+            $this->loader->loadFromDirectory($directory);
+            $fixtures = array_merge($fixtures, $this->loader->getFixtures());
+        }
 
         if (count($fixtures) > 0) {
             $this->executor->execute($fixtures);

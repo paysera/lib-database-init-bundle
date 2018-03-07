@@ -24,13 +24,17 @@ class InitDatabaseCommand extends Command
         $this
             ->setName('paysera:db-init:init')
             ->addArgument('initializer', InputArgument::OPTIONAL, 'Specific single initializer to run')
+            ->addArgument('set', InputArgument::OPTIONAL, 'Specific named set to run')
             ->setDescription('Initialize Database')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $reports = $this->initializer->initialize($input->getArgument('initializer'));
+        $reports = $this->initializer->initialize(
+            $input->getArgument('initializer'),
+            $input->getArgument('set')
+        );
 
         foreach ($reports as $report) {
             foreach ($report->getMessages() as $message) {

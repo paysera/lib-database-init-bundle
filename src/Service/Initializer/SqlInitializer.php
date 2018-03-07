@@ -15,21 +15,16 @@ class SqlInitializer implements DatabaseInitializerInterface
 {
     private $connection;
     private $logger;
-    private $sqlDirectory;
+    private $sqlDirectories;
 
-    /**
-     * @param Connection $connection
-     * @param LoggerInterface $logger
-     * @param string|null $sqlDirectory
-     */
     public function __construct(
         Connection $connection,
         LoggerInterface $logger,
-        $sqlDirectory
+        array $sqlDirectories
     ) {
         $this->connection = $connection;
         $this->logger = $logger;
-        $this->sqlDirectory = $sqlDirectory;
+        $this->sqlDirectories = $sqlDirectories;
     }
 
     public function getName()
@@ -37,16 +32,21 @@ class SqlInitializer implements DatabaseInitializerInterface
         return 'sql';
     }
 
-    public function initialize()
+    public function initialize($setName)
     {
-        if ($this->sqlDirectory === null) {
+        if (count($this->sqlDirectories) === 0) {
             return null;
+        }
+
+        $directories = array_values($this->sqlDirectories);
+        if ($setName !== null && isset($this->sqlDirectories[$setName])) {
+            $directories = [$this->sqlDirectories[$setName]];
         }
 
         $finder = Finder::create()
             ->files()
             ->name('*.sql')
-            ->in($this->sqlDirectory)
+            ->in($directories)
             ->sortByName()
         ;
 

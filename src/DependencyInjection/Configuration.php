@@ -23,13 +23,19 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('directories')
-                ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('sql')->defaultNull()->end()
-                        ->scalarNode('fixtures')->defaultNull()->end()
+                        ->arrayNode('sql')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
+                        ->end()
+                        ->arrayNode('fixtures')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
                     ->end()
                 ->end()
-            ->end()
+            ->end();
         ;
 
         return $treeBuilder;

@@ -7,9 +7,10 @@ use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
 interface DatabaseInitializerInterface
 {
     /**
+     * @param string|null $setName
      * @return InitializationReport|null
      */
-    public function initialize();
+    public function initialize($setName);
 
     /**
      * @return string

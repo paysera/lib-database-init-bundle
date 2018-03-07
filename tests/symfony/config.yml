@@ -25,5 +25,7 @@ doctrine:
 
 paysera_database_init:
     directories:
-        sql: '%kernel.root_dir%/sql'
-        fixtures: '%kernel.root_dir%/Fixtures'
+        sql:
+            initial: '%kernel.root_dir%/sql'
+        fixtures:
+            initial: '%kernel.root_dir%/Fixtures'
