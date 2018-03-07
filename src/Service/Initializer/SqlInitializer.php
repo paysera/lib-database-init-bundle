@@ -68,7 +68,7 @@ class SqlInitializer implements DatabaseInitializerInterface
                 } catch (TableExistsException $exception) {
                     $messages[] = $this->processDuplicateTable($exception);
                 } catch (DriverException $exception) {
-                    $messages[] = $this->processDuplicateIndexOrColumn($exception);
+                    $messages[] = $this->processDuplicateIndexColumnRecord($exception);
                 } catch (DBALException $exception) {
                     $this->logger->warning('Got Database exception while executing SQL', [$exception]);
                     $messages[] = $this->processBaseException($exception);
@@ -78,7 +78,7 @@ class SqlInitializer implements DatabaseInitializerInterface
 
         $report = new InitializationReport();
         return $report
-            ->setMessages($messages)
+            ->setMessages(array_filter($messages))
             ->setInitializer($this->getName())
         ;
     }
@@ -109,7 +109,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         return $this->processBaseException($exception);
     }
 
-    private function processDuplicateIndexOrColumn(DriverException $exception)
+    private function processDuplicateIndexColumnRecord(DriverException $exception)
     {
         $message = new InitializationMessage();
 
@@ -130,6 +130,12 @@ class SqlInitializer implements DatabaseInitializerInterface
                 ->setType(InitializationMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate column "%s"', $matches[1]))
             ;
+        }
+        if (
+            preg_match('#duplicate entry \'([\w-]+)\'#i', $exception->getMessage(), $matches) !== false
+            && isset($matches[1])
+        ) {
+            return null;
         }
 
         return $this->processBaseException($exception);
