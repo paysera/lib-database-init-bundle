@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Bundle\DatabaseInitBundle\Service\Initializer;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationMessage;
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessMessage;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 
 class FixturesInitializer implements DatabaseInitializerInterface
 {
@@ -23,14 +24,8 @@ class FixturesInitializer implements DatabaseInitializerInterface
         $this->fixturesDirectories = $fixturesDirectories;
     }
 
-    public function getName()
+    public function initialize(string $initializerName, string $setName = null)
     {
-        return 'fixtures';
-    }
-
-    public function initialize($setName)
-    {
-
         if (count($this->fixturesDirectories) === 0) {
             return null;
         }
@@ -52,18 +47,18 @@ class FixturesInitializer implements DatabaseInitializerInterface
             $this->executor->execute($fixtures);
 
             foreach ($fixtures as $fixture) {
-                $message = new InitializationMessage();
+                $message = new ProcessMessage();
                 $messages[] = $message
-                    ->setType(InitializationMessage::TYPE_SUCCESS)
+                    ->setType(ProcessMessage::TYPE_SUCCESS)
                     ->setMessage(get_class($fixture))
                 ;
             }
         }
 
-        $report = new InitializationReport();
+        $report = new ProcessReport();
         return $report
             ->setMessages($messages)
-            ->setInitializer($this->getName())
+            ->setName($initializerName)
         ;
     }
 }

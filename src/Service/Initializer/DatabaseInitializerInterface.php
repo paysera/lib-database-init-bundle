@@ -1,19 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Bundle\DatabaseInitBundle\Service\Initializer;
 
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 
 interface DatabaseInitializerInterface
 {
     /**
+     * @param string $initializerName
      * @param string|null $setName
-     * @return InitializationReport|null
+     * @return ProcessReport|null
      */
-    public function initialize($setName);
-
-    /**
-     * @return string
-     */
-    public function getName();
+    public function initialize(string $initializerName, string $setName = null);
 }

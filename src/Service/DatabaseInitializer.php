@@ -1,47 +1,47 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Bundle\DatabaseInitBundle\Service;
 
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 use Paysera\Bundle\DatabaseInitBundle\Service\Initializer\DatabaseInitializerInterface;
-use SplPriorityQueue;
 
 class DatabaseInitializer
 {
     /**
-     * @var SplPriorityQueue|DatabaseInitializerInterface[]
+     * @var DatabaseInitializerInterface[]
      */
     private $initializers;
 
     public function __construct()
     {
-        $this->initializers = new SplPriorityQueue();
+        $this->initializers = [];
     }
-
+    
     /**
      * @param DatabaseInitializerInterface $initializer
-     * @param int $priority
+     * @param string $name
      */
-    public function addInitializer(DatabaseInitializerInterface $initializer, $priority)
+    public function addInitializer(DatabaseInitializerInterface $initializer, string $name)
     {
-        $this->initializers->insert($initializer, $priority);
+        $this->initializers[$name] = $initializer;
     }
 
     /**
      * @param string|null $initializerName
      * @param string|null $setName
-     * @return InitializationReport[]
+     * @return ProcessReport[]
      */
     public function initialize($initializerName = null, $setName = null)
     {
         $reports = [];
-        foreach ($this->initializers as $initializer) {
+        foreach ($this->initializers as $name => $initializer) {
             if ($initializerName !== null) {
-                if ($initializer->getName() === $initializerName) {
-                    $reports[] = $initializer->initialize($setName);
+                if ($name === $initializerName) {
+                    $reports[] = $initializer->initialize($name, $setName);
                 }
             } else {
-                $reports[] = $initializer->initialize($setName);
+                $reports[] = $initializer->initialize($name, $setName);
             }
         }
 

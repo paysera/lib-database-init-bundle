@@ -11,10 +11,20 @@ monolog:
             level: debug
 doctrine:
     dbal:
-        driver: pdo_sqlite
-        memory: true
+        default_connection: host_connection
+        connections:
+            host_connection:
+                driver:       mysqli
+                host:         '%env(MYSQL_HOST)%'
+                port:         3306
+                dbname:       '%env(MYSQL_DATABASE)%'
+                user:         '%env(MYSQL_USER)%'
+                password:     '%env(MYSQL_PASSWORD)%'
+                charset:      UTF8
+                logging:      true
+
     orm:
-        connection: default
+        connection: host_connection
         auto_generate_proxy_classes: true
         mappings:
             Dummy:
@@ -29,3 +39,14 @@ paysera_database_init:
             initial: '%kernel.root_dir%/sql'
         fixtures:
             initial: '%kernel.root_dir%/Fixtures'
+        structure: &exported '%kernel.root_dir%/exportedSql'
+    exports:
+        configuration:
+            name: configuration
+            tables:
+                - table_1
+            directory: *exported
+        data:
+            name: data
+            invert_tables_from: configuration
+            directory: *exported
