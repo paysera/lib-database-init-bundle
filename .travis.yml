@@ -9,6 +9,13 @@ env:
 php:
   - '7.0'
   - '7.1'
+  - '7.2'
+
+services:
+  - mysql
 
 install:
   - composer install
+
+before_script:
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD($MYSQL_PASSWORD) WHERE user='$MYSQL_USER';\nFLUSH PRIVILEGES;\n" | mysql -u root
