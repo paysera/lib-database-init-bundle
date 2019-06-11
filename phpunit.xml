@@ -15,7 +15,7 @@
         <server name="KERNEL_DIR" value="tests/"/>
         <env name="MYSQL_ROOT_PASSWORD" value="root" />
         <env name="MYSQL_DATABASE" value="test" />
-        <env name="MYSQL_USER" value="test" />
+        <env name="MYSQL_USER" value="travis" />
         <env name="MYSQL_PASSWORD" value="test" />
         <env name="MYSQL_HOST" value="127.0.0.1" />
     </php>
