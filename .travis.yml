@@ -3,6 +3,7 @@ language: php
 sudo: false
 
 env:
+    - MYSQL_ROOT_PASSWORD=root MYSQL_DATABASE=test MYSQL_USER=travis MYSQL_PASSWORD=test MYSQL_HOST=127.0.0.1
   global:
     - COMPOSER_NO_INTERACTION="1"
 
@@ -18,4 +19,4 @@ install:
   - composer install
 
 before_script:
-  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('test') WHERE user='travis';\nFLUSH PRIVILEGES;\nCREATE DATABASE IF NOT EXISTS test;\n" | mysql -u root
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD($MYSQL_PASSWORD) WHERE user=$MYSQL_USER;\nFLUSH PRIVILEGES;\nCREATE DATABASE IF NOT EXISTS MYSQL_DATABASE;\n" | mysql -u root
