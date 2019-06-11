@@ -17,6 +17,6 @@
         <env name="MYSQL_DATABASE" value="test" />
         <env name="MYSQL_USER" value="test" />
         <env name="MYSQL_PASSWORD" value="test" />
-        <env name="MYSQL_HOST" value="mysql-lib-db-init" />
+        <env name="MYSQL_HOST" value="127.0.0.1" />
     </php>
 </phpunit>
