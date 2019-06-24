@@ -3,9 +3,10 @@ language: php
 sudo: false
 
 env:
-    - MYSQL_ROOT_PASSWORD=root MYSQL_DATABASE=test MYSQL_USER=travis MYSQL_PASSWORD=test MYSQL_HOST=127.0.0.1
   global:
     - COMPOSER_NO_INTERACTION="1"
+  matrix:
+    - MYSQL_ROOT_PASSWORD=root MYSQL_DATABASE=test MYSQL_USER=travis MYSQL_PASSWORD=test MYSQL_HOST=127.0.0.1
 
 php:
   - '7.0'
