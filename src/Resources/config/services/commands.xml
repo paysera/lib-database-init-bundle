@@ -10,5 +10,11 @@
             <argument type="service" id="paysera_database_init.database_initializer"/>
             <tag name="console.command"/>
         </service>
+
+        <service id="paysera_database_init.command.export_database"
+                 class="Paysera\Bundle\DatabaseInitBundle\Command\ExportDatabaseCommand">
+            <argument type="service" id="paysera_database_init.database_exporter"/>
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Bundle\DatabaseInitBundle;
 
@@ -10,11 +11,18 @@ class PayseraDatabaseInitBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AddTaggedCompilerPass(
+        $container->addCompilerPass((new AddTaggedCompilerPass(
             'paysera_database_init.database_initializer',
             'paysera_database_init.initializer',
             'addInitializer',
-            ['priority']
+            ['type']
+        ))->enablePriority());
+    
+        $container->addCompilerPass(new AddTaggedCompilerPass(
+            'paysera_database_init.database_exporter',
+            'paysera_database_init.exporter',
+            'addExporter',
+            ['type']
         ));
     }
 }

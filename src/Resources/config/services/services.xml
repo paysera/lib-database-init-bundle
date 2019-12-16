@@ -9,6 +9,16 @@
                  class="Paysera\Bundle\DatabaseInitBundle\Service\DatabaseInitializer">
         </service>
 
+        <service id="paysera_database_init.database_exporter"
+                 class="Paysera\Bundle\DatabaseInitBundle\Service\DatabaseExporter">
+        </service>
+
+        <service id="paysera_database_init.mysql_dumper"
+                 class="Paysera\Bundle\DatabaseInitBundle\Service\MySqlDumper">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="logger"/>
+        </service>
+
         <service id="paysera_database_init.fixtures.container_aware_loader"
                  class="Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader"
                  lazy="true">

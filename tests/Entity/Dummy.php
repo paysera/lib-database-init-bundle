@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Tests\Entity;
 
@@ -34,6 +35,13 @@ class Dummy
     public function getId()
     {
         return $this->id;
+    }
+    
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**

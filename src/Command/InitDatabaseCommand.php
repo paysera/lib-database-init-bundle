@@ -2,7 +2,7 @@
 
 namespace Paysera\Bundle\DatabaseInitBundle\Command;
 
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationMessage;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessMessage;
 use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseInitializer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,31 +41,31 @@ class InitDatabaseCommand extends Command
         foreach ($reports as $report) {
             foreach ($report->getMessages() as $message) {
                 $text = null;
-                if ($message->getType() === InitializationMessage::TYPE_INFO) {
+                if ($message->getType() === ProcessMessage::TYPE_INFO) {
                     $totalFailed++;
                     if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
                         $text = sprintf(
                             '<info>%s</info>: <comment>%s</comment>',
-                            $report->getInitializer(),
+                            $report->getName(),
                             $message->getMessage()
                         );
                     }
-                } elseif ($message->getType() === InitializationMessage::TYPE_SUCCESS) {
+                } elseif ($message->getType() === ProcessMessage::TYPE_SUCCESS) {
                     $totalSucceeded++;
                     if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
                         $text = sprintf(
                             '<info>%s</info>: %s',
-                            $report->getInitializer(),
+                            $report->getName(),
                             $message->getMessage()
                         );
                     }
                 }
 
-                if ($message->getType() === InitializationMessage::TYPE_ERROR) {
+                if ($message->getType() === ProcessMessage::TYPE_ERROR) {
                     $totalFailed++;
                     $text = sprintf(
                         '<info>%s</info>: <error>%s</error>',
-                        $report->getInitializer(),
+                        $report->getName(),
                         $message->getMessage()
                     );
                 }

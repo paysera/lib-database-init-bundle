@@ -14,13 +14,13 @@ class LoadDummyData extends AbstractFixture implements OrderedFixtureInterface
         $dummy1 = new Dummy();
         $dummy1
             ->setName('name_1')
-            ->setCreatedAt(new \DateTime('-1 day'))
+            ->setCreatedAt(new \DateTime('29.04.2019'))
         ;
 
         $dummy2 = new Dummy();
         $dummy2
             ->setName('name_2')
-            ->setCreatedAt(new \DateTime())
+            ->setCreatedAt(new \DateTime('30.04.2019'))
         ;
 
         $manager->persist($dummy1);

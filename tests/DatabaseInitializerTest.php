@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Tests;
 
@@ -8,6 +9,10 @@ use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseInitializer;
 use Paysera\Tests\Entity\Dummy;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
+use Paysera\Bundle\DatabaseInitBundle\PayseraDatabaseInitBundle;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
+use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 
 class DatabaseInitializerTest extends BundleTestCase
 {
@@ -25,16 +30,21 @@ class DatabaseInitializerTest extends BundleTestCase
      * @var EntityManager
      */
     private $entityManager;
+    
+    /**
+     * @var Application
+     */
+    private $application;
 
     protected function setUp()
     {
         static::bootKernel([
             'base_dir' => __DIR__ . '/symfony',
             'bundles' => [
-                new \Paysera\Bundle\DatabaseInitBundle\PayseraDatabaseInitBundle(),
-                new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-                new \Symfony\Bundle\MonologBundle\MonologBundle(),
-                new \Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+                new PayseraDatabaseInitBundle(),
+                new DoctrineBundle(),
+                new MonologBundle(),
+                new DoctrineMigrationsBundle(),
             ]
         ]);
 
@@ -44,24 +54,33 @@ class DatabaseInitializerTest extends BundleTestCase
         $this->connection = $container->get('database_connection');
         $this->entityManager = $container->get('doctrine.orm.entity_manager');
 
-        $application = new Application(static::$kernel);
-        $application->setAutoExit(false);
-        $application->setCatchExceptions(false);
-        $application->run(new ArrayInput([
+        $this->application = new Application(static::$kernel);
+        $this->application->setAutoExit(false);
+        $this->application->setCatchExceptions(false);
+        $this->application->run(new ArrayInput([
             'command' => 'doctrine:migrations:migrate',
             '-q' => null,
         ]));
     }
-
+    
+    protected function tearDown()
+    {
+        $this->application->run(new ArrayInput([
+            'command' => 'doctrine:schema:drop',
+            '--full-database' => true,
+            '--force' => true,
+        ]));
+    }
+    
     public function testDatabaseInitializer()
     {
         $reports = $this->databaseInitializer->initialize();
-
+        
         $this->assertCount(2, $reports);
-
+    
         $sqlReport = $reports[0];
         $fixtureReport = $reports[1];
-
+        
         $this->assertCount(3, $sqlReport->getMessages());
         $this->assertCount(1, $fixtureReport->getMessages());
 

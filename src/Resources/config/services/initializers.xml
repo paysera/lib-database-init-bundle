@@ -11,7 +11,7 @@
             <argument type="service" id="logger"/>
             <argument>%paysera_database_init.directory.sql%</argument>
 
-            <tag name="paysera_database_init.initializer" priority="100"/>
+            <tag name="paysera_database_init.initializer" type="sql" priority="1"/>
         </service>
 
         <service id="paysera_database_init.initializer.fixtures"
@@ -20,7 +20,7 @@
             <argument type="service" id="paysera_database_init.fixtures.orm_executor"/>
             <argument>%paysera_database_init.directory.fixtures%</argument>
 
-            <tag name="paysera_database_init.initializer" priority="50"/>
+            <tag name="paysera_database_init.initializer" type="fixtures" priority="5"/>
         </service>
     </services>
 </container>

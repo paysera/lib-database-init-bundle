@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Paysera\Bundle\DatabaseInitBundle\Service\Initializer;
 
@@ -6,8 +7,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Exception\TableExistsException;
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationMessage;
-use Paysera\Bundle\DatabaseInitBundle\Entity\InitializationReport;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessMessage;
+use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Finder\Finder;
 
@@ -27,12 +28,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         $this->sqlDirectories = $sqlDirectories;
     }
 
-    public function getName()
-    {
-        return 'sql';
-    }
-
-    public function initialize($setName)
+    public function initialize(string $initializerName, string $setName = null)
     {
         if (count($this->sqlDirectories) === 0) {
             return null;
@@ -76,32 +72,32 @@ class SqlInitializer implements DatabaseInitializerInterface
             }
         }
 
-        $report = new InitializationReport();
+        $report = new ProcessReport();
         return $report
             ->setMessages(array_filter($messages))
-            ->setInitializer($this->getName())
+            ->setName($initializerName)
         ;
     }
 
     private function buildSuccessMessage($query)
     {
-        $message = new InitializationMessage();
+        $message = new ProcessMessage();
         return $message
-            ->setType(InitializationMessage::TYPE_SUCCESS)
+            ->setType(ProcessMessage::TYPE_SUCCESS)
             ->setMessage($query)
         ;
     }
 
     private function processDuplicateTable(TableExistsException $exception)
     {
-        $message = new InitializationMessage();
+        $message = new ProcessMessage();
 
         if (
             preg_match('#table \'(\w+)\' already exists#i', $exception->getMessage(), $matches) !== false
             && isset($matches[1])
         ) {
             return $message
-                ->setType(InitializationMessage::TYPE_INFO)
+                ->setType(ProcessMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate table "%s"', $matches[1]))
             ;
         }
@@ -111,14 +107,14 @@ class SqlInitializer implements DatabaseInitializerInterface
 
     private function processDuplicateIndexColumnRecord(DriverException $exception)
     {
-        $message = new InitializationMessage();
+        $message = new ProcessMessage();
 
         if (
             preg_match('#duplicate key name \'([\w-]+)\'#i', $exception->getMessage(), $matches) !== false
             && isset($matches[1])
         ) {
             return $message
-                ->setType(InitializationMessage::TYPE_INFO)
+                ->setType(ProcessMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate index "%s"', $matches[1]))
             ;
         }
@@ -127,7 +123,7 @@ class SqlInitializer implements DatabaseInitializerInterface
             && isset($matches[1])
         ) {
             return $message
-                ->setType(InitializationMessage::TYPE_INFO)
+                ->setType(ProcessMessage::TYPE_INFO)
                 ->setMessage(sprintf('Duplicate column "%s"', $matches[1]))
             ;
         }
@@ -143,10 +139,10 @@ class SqlInitializer implements DatabaseInitializerInterface
 
     private function processBaseException(DBALException $exception)
     {
-        $message = new InitializationMessage();
+        $message = new ProcessMessage();
 
         return $message
-            ->setType(InitializationMessage::TYPE_ERROR)
+            ->setType(ProcessMessage::TYPE_ERROR)
             ->setMessage($exception->getMessage())
         ;
     }
