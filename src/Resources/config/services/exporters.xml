@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
         <service id="paysera_database_init.exporter.structure"
                  class="Paysera\Bundle\DatabaseInitBundle\Service\Exporter\StructureExporter">
             <argument type="service" id="paysera_database_init.mysql_dumper"/>

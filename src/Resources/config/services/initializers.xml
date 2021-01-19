@@ -5,6 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <defaults public="true"/>
         <service id="paysera_database_init.initializer.sql"
                  class="Paysera\Bundle\DatabaseInitBundle\Service\Initializer\SqlInitializer">
             <argument type="service" id="database_connection"/>
