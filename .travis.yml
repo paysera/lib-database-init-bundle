@@ -9,9 +9,10 @@ env:
     - MYSQL_ROOT_PASSWORD=root MYSQL_DATABASE=test MYSQL_USER=travis MYSQL_PASSWORD=test MYSQL_HOST=127.0.0.1
 
 php:
-  - '7.0'
   - '7.1'
   - '7.2'
+  - '7.3'
+  - '7.4'
 
 services:
   - mysql
