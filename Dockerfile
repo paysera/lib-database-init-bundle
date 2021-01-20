@@ -3,4 +3,4 @@ WORKDIR /app
 
 RUN docker-php-ext-install mysqli && \
     apt-get update && \
-    apt-get install -y mysql-client
+    apt-get install -y mariadb-client
