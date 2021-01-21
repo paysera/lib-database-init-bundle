@@ -21,4 +21,4 @@ install:
   - composer install
 
 before_script:
-  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('$MYSQL_PASSWORD') WHERE user='$MYSQL_USER';\nFLUSH PRIVILEGES;\nCREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;\n" | mysql -u root
+  - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('$MYSQL_PASSWORD') WHERE user='$MYSQL_USER';\nFLUSH PRIVILEGES;\nCREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;\n" | mysql -u root
