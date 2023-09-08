@@ -24,7 +24,7 @@ class FixturesInitializer implements DatabaseInitializerInterface
         $this->fixturesDirectories = $fixturesDirectories;
     }
 
-    public function initialize(string $initializerName, string $setName = null)
+    public function initialize(string $initializerName, string $setName = null): ?ProcessReport
     {
         if (count($this->fixturesDirectories) === 0) {
             return null;

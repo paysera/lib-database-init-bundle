@@ -5,6 +5,8 @@ namespace Paysera\Tests;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\NotSupported;
+use Exception;
 use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseInitializer;
 use Paysera\Tests\Entity\Dummy;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -30,12 +32,15 @@ class DatabaseInitializerTest extends BundleTestCase
      * @var EntityManager
      */
     private $entityManager;
-    
+
     /**
      * @var Application
      */
     private $application;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp()
     {
         static::bootKernel([
@@ -62,8 +67,11 @@ class DatabaseInitializerTest extends BundleTestCase
             '-q' => null,
         ]));
     }
-    
-    protected function tearDown()
+
+    /**
+     * @throws Exception
+     */
+    protected function tearDown(): void
     {
         $this->application->run(new ArrayInput([
             'command' => 'doctrine:schema:drop',
@@ -71,23 +79,28 @@ class DatabaseInitializerTest extends BundleTestCase
             '--force' => true,
         ]));
     }
-    
+
+    /**
+     * @throws NotSupported
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
     public function testDatabaseInitializer()
     {
         $reports = $this->databaseInitializer->initialize();
-        
+
         $this->assertCount(2, $reports);
-    
+
         $sqlReport = $reports[0];
         $fixtureReport = $reports[1];
-        
+
         $this->assertCount(3, $sqlReport->getMessages());
         $this->assertCount(1, $fixtureReport->getMessages());
 
-        $countPlain = $this->connection->query('SELECT count(*) FROM table_1;')->fetchColumn();
+        $countPlain = $this->connection->executeQuery(/** @lang text */'SELECT count(*) FROM table_1;')->fetchOne();
         $this->assertEquals(2, $countPlain);
 
         $countManaged = $this->entityManager->getRepository(Dummy::class)->findAll();
-        $this->assertEquals(2, count($countManaged));
+        $this->assertCount(2, $countManaged);
     }
 }

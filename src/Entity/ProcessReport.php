@@ -22,36 +22,26 @@ class ProcessReport
     /**
      * @return ProcessMessage[]
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
 
     /**
      * @param ProcessMessage[] $messages
-     *
-     * @return $this
      */
-    public function setMessages($messages)
+    public function setMessages(array $messages): self
     {
         $this->messages = $messages;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return $this
-     */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;

@@ -11,13 +11,13 @@ class MySqlDumper implements SqlDumperInterface
 {
     private $connection;
     private $logger;
-    
+
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;
         $this->logger = $logger;
     }
-    
+
     /**
      * @param string[] $tables
      * @return string
@@ -28,10 +28,10 @@ class MySqlDumper implements SqlDumperInterface
             '--no-data',
             '--skip-add-drop-table',
         ];
-        
+
         return $this->dump($options, $tables);
     }
-    
+
     /**
      * @param string[] $tables
      * @param string[] $excludeTables
@@ -42,20 +42,18 @@ class MySqlDumper implements SqlDumperInterface
         $options = [
             '--no-create-info',
         ];
-        
+
         foreach ($excludeTables as $excludeTable) {
             $options[] = sprintf('--ignore-table=%s.%s', $this->connection->getDatabase(), $excludeTable);
         }
-    
-        $output = implode("\n", [
+
+        return implode("\n", [
             'SET FOREIGN_KEY_CHECKS=0;',
             $this->dump($options, $tables),
             'SET FOREIGN_KEY_CHECKS=1;',
         ]);
-    
-        return $output;
     }
-    
+
     /**
      * @param string[] $options
      * @param string[] $tables
@@ -64,17 +62,18 @@ class MySqlDumper implements SqlDumperInterface
     private function dump(array $options, array $tables = []): string
     {
         $options[] = '--compact';
-        
+        $connectionParams = $this->connection->getParams();
+
         $process = new Process(array_merge(
             [
                 'mysqldump',
                 '-h',
-                $this->connection->getHost(),
+                $connectionParams['host'],
                 '-P',
-                $this->connection->getPort(),
+                $connectionParams['port'],
                 '-u',
-                $this->connection->getUsername(),
-                '--password=' . $this->connection->getPassword(),
+                $connectionParams['user'],
+                '--password=' . $connectionParams['password'],
             ],
             $options,
             [
@@ -82,18 +81,18 @@ class MySqlDumper implements SqlDumperInterface
             ],
             $tables
         ));
-        
+
         $process->mustRun();
-        
+
         $this->logger->info(
             sprintf(
                 'Dump %s of %s in %s',
                 implode(',', $tables),
                 $this->connection->getDatabase(),
-                $this->connection->getHost()
+                $connectionParams['host']
             )
         );
-        
+
         return $process->getOutput();
     }
 }

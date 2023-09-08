@@ -22,36 +22,26 @@ class InitializationReport
     /**
      * @return InitializationMessage[]
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
 
     /**
      * @param InitializationMessage[] $messages
-     *
-     * @return $this
      */
-    public function setMessages($messages)
+    public function setMessages(array $messages): self
     {
         $this->messages = $messages;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getInitializer()
+    public function getInitializer(): string
     {
         return $this->initializer;
     }
 
-    /**
-     * @param string $initializer
-     *
-     * @return $this
-     */
-    public function setInitializer($initializer)
+    public function setInitializer(string $initializer): self
     {
         $this->initializer = $initializer;
         return $this;

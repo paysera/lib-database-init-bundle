@@ -2,6 +2,7 @@
 
 namespace Paysera\Tests;
 
+use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -25,7 +26,6 @@ class TestAppKernel extends Kernel
             throw new InvalidArgumentException(sprintf('The test case "%s" does not exist.', $testCase));
         }
 
-        $configFilePath = null;
         if ($testCase === null) {
             $configFilePath = $baseDir . '/' . $configFile;
         } else {
@@ -39,7 +39,7 @@ class TestAppKernel extends Kernel
         parent::__construct('test', true);
     }
 
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return array_merge(
             [
@@ -48,7 +48,7 @@ class TestAppKernel extends Kernel
             $this->additionalBundles
         );
     }
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         if ($this->testCase !== null) {
             return $this->baseDir . '/cache/' . $this->testCase . '/cache/' . $this->environment;
@@ -56,7 +56,7 @@ class TestAppKernel extends Kernel
         return $this->baseDir . '/cache/' . $this->environment;
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         if ($this->testCase !== null) {
             return $this->baseDir . '/logs/' . $this->testCase . '/logs';
@@ -64,12 +64,15 @@ class TestAppKernel extends Kernel
         return $this->baseDir . '/logs';
     }
 
+    /**
+     * @throws Exception
+     */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->baseDir . '/' . $this->configFile);
     }
 
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([$this->baseDir, $this->configFile, $this->bundles, $this->testCase]);
     }
@@ -80,7 +83,7 @@ class TestAppKernel extends Kernel
         $this->__construct($a[0], $a[1], $a[2], $a[3]);
     }
 
-    protected function getKernelParameters()
+    protected function getKernelParameters(): array
     {
         $parameters = parent::getKernelParameters();
         $parameters['kernel.test_case'] = $this->testCase;

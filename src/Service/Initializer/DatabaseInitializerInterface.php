@@ -7,10 +7,5 @@ use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 
 interface DatabaseInitializerInterface
 {
-    /**
-     * @param string $initializerName
-     * @param string|null $setName
-     * @return ProcessReport|null
-     */
-    public function initialize(string $initializerName, string $setName = null);
+    public function initialize(string $initializerName, string $setName = null): ?ProcessReport;
 }
