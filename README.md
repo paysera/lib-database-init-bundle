@@ -27,10 +27,10 @@ In your `config_dev.yml` - change table names with corresponding tables in the p
 paysera_database_init:
     directories:
         sql: 
-            initial: &initial '%kernel.root_dir%/sql/initial'
-            additional: &additional '%kernel.root_dir%/sql/additional'
+            initial: &initial '%kernel.project_dir%/sql/initial'
+            additional: &additional '%kernel.project_dir%/sql/additional'
         fixtures: 
-            main: '%kernel.root_dir%/fixtures'
+            main: '%kernel.project_dir%/fixtures'
         structure: *initial
     exports:
         configuration:
