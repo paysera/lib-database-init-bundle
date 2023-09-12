@@ -5,6 +5,7 @@ namespace Paysera\Tests;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Exception;
 use Paysera\Bundle\DatabaseInitBundle\PayseraDatabaseInitBundle;
 use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseExporter;
@@ -38,7 +39,7 @@ class DatabaseExporterTest extends BundleTestCase
     /**
      * @throws Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         static::bootKernel([
             'base_dir' => __DIR__ . '/symfony',

@@ -13,13 +13,15 @@
         }
     },
     "require": {
+        "php": "^7.4||^8.0",
         "paysera/lib-dependency-injection": "^1.0",
         "doctrine/dbal": "^2.5",
         "doctrine/data-fixtures": "^1.0",
         "doctrine/annotations": "^1.14",
         "symfony/finder": "^5.0",
         "symfony/console": "^5.0",
-        "symfony/http-kernel": "^5.0"
+        "symfony/http-kernel": "^5.0",
+        "symfony/doctrine-bridge": "^5.0"
     },
     "require-dev": {
         "symfony/symfony": "^5.0",
