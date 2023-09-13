@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 3.0.0
+- Added
+  - Support for Symfony 5
+  - Support for PHP 8
+- Removed
+  - Support for Symfony 3 and 4
+- Changed
+  - PHP 7.4 is the minimum required version 
+- Fixed
+  - the config property `paysera_database_init.directories` is now required to avoid additional unclear error messages
+
 ## 2.1.0
  - Added
     - Support for Symfony 4
