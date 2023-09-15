@@ -1,0 +1,31 @@
+#!/bin/sh
+
+VALID_ARGUMENTS="stop enter 7.4 8.0 8.1"
+ROOT_DIR="$(dirname "$(readlink -f "$0")")/.."
+
+cd "${ROOT_DIR}" || exit 1
+
+if ! echo "$VALID_ARGUMENTS" | grep -qw "$1"; then
+  echo "Argument is missing or invalid. Valid arguments are [$VALID_ARGUMENTS]."
+  exit 1
+fi
+
+if [ "$1" = 'stop' ]; then
+  PHP_VERSION="" docker-compose --context default down -v
+elif [ "$1" = 'enter' ]; then
+  PHP_VERSION="" docker-compose --context default exec -it php sh
+else
+  echo "Stopping current environment..."
+  echo ""
+
+  PHP_VERSION="" docker-compose --context default down -v
+
+  echo "Removing \"vendor\" and \"composer.lock\"..."
+  rm -rf ./composer.lock
+  rm -rf ./vendor
+
+  echo "Building and starting new environment using PHP $1..."
+  echo ""
+
+  PHP_VERSION="$1" docker-compose --context default up -d --build
+fi

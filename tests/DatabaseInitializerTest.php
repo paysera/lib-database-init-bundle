@@ -41,7 +41,7 @@ class DatabaseInitializerTest extends BundleTestCase
     /**
      * @throws Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         static::bootKernel([
             'base_dir' => __DIR__ . '/symfony',

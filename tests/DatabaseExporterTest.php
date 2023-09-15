@@ -5,7 +5,6 @@ namespace Paysera\Tests;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Exception;
 use Paysera\Bundle\DatabaseInitBundle\PayseraDatabaseInitBundle;
 use Paysera\Bundle\DatabaseInitBundle\Service\DatabaseExporter;
@@ -110,10 +109,14 @@ class DatabaseExporterTest extends BundleTestCase
 
     private function fixContent(string $fileContent): string
     {
-        return str_replace(["\r", "\n"], '', preg_replace(
+        $result = str_replace('VALUES (', 'VALUES(', $fileContent);
+
+        $result = preg_replace(
             '#(\'\d+-\d+-\d+ \d+:\d+:\d+\',\d+)|(\'%migration_fix%\')#',
             '\'2023-09-08 00:00:00\',1',
-            $fileContent
-        ));
+            $result
+        );
+
+        return str_replace(["\r", "\n"], '', $result);
     }
 }

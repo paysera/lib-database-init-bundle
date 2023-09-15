@@ -1,11 +1,15 @@
 version: '3'
 services:
   php:
-    container_name: lib-db-init
+    container_name: lib-db-init-php
     build:
       context: .
+      args:
+        PHP_VERSION: "${PHP_VERSION}"
     volumes:
       - ./:/app
+    tty: true
+    stdin_open: true
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}

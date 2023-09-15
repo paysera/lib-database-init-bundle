@@ -8,10 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added
   - Support for Symfony 5
   - Support for PHP 8
+  - new command `bin/devenv` for creating dev environment for testing with php7.4, php8.0, php8.1. See README for details.
 - Removed
   - Support for Symfony 3 and 4
 - Changed
-  - PHP 7.4 is the minimum required version 
+  - PHP 7.4 is now the minimum required version
 - Fixed
   - the config property `paysera_database_init.directories` is now required to avoid additional unclear error messages
 
@@ -36,7 +37,7 @@ paysera_database_init:
          fixtures:
              main: '%kernel.root_dir%/Fixtures'
          structure: *initial
-    exports:
+     exports:
         configuration:
             name: configuration
             tables:

@@ -95,8 +95,23 @@ Implement `\Paysera\Bundle\DatabaseInitBundle\Service\Initializer\DatabaseInitia
 and tag your service with `paysera_database_init.initializer`, provide `priority` tag attribute.
 
 #### Run PHPUnit tests
-`docker-compose up`
-
-After that, run the tests from within the container: 
-
-`docker exec -it lib-db-init vendor/bin/phpunit`
+Starting or switching the dev environment:
+```
+bin/devenv [7.4,8.0,8.1]
+```
+Entering php container: 
+```shell
+bin/devenv enter
+```
+Install composer packages:
+```shell
+composer install
+```
+Running tests:
+```shell
+vendor/bin/phpunit
+```
+Stopping the dev environment:
+```shell
+bin/devenv stop
+```
