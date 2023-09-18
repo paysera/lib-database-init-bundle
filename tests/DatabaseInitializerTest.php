@@ -18,25 +18,10 @@ use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 
 class DatabaseInitializerTest extends BundleTestCase
 {
-    /**
-     * @var DatabaseInitializer
-     */
-    private $databaseInitializer;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * @var Application
-     */
-    private $application;
+    private DatabaseInitializer $databaseInitializer;
+    private Connection $connection;
+    private EntityManager $entityManager;
+    private Application $application;
 
     /**
      * @throws Exception
@@ -85,7 +70,7 @@ class DatabaseInitializerTest extends BundleTestCase
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function testDatabaseInitializer()
+    public function testDatabaseInitializer(): void
     {
         $reports = $this->databaseInitializer->initialize();
 

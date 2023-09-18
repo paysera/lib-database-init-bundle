@@ -10,7 +10,7 @@ use Paysera\Tests\Entity\Dummy;
 
 class LoadDummyData extends AbstractFixture implements OrderedFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $dummy1 = new Dummy();
         $dummy1

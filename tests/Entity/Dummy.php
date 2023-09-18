@@ -17,17 +17,17 @@ class Dummy
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue()
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     public function getId(): int
     {

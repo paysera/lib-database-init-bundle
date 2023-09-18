@@ -6,16 +6,20 @@ use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class TestAppKernel extends Kernel
 {
-    private $baseDir;
-    private $configFile;
-    private $additionalBundles;
-    private $testCase;
+    private string $baseDir;
+    private string $configFile;
+    /**
+     * @var BundleInterface[]
+     */
+    private array $additionalBundles;
+    private ?string $testCase;
 
-    public function __construct($baseDir, $configFile, array $additionalBundles, $testCase)
+    public function __construct(string $baseDir, string $configFile, array $additionalBundles, ?string $testCase)
     {
         $this->baseDir = $baseDir;
         $this->configFile = $configFile;
@@ -48,6 +52,7 @@ class TestAppKernel extends Kernel
             $this->additionalBundles
         );
     }
+
     public function getCacheDir(): string
     {
         if ($this->testCase !== null) {

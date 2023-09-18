@@ -15,25 +15,10 @@ use Symfony\Component\Console\Input\ArrayInput;
 
 class DatabaseExporterTest extends BundleTestCase
 {
-    /**
-     * @var DatabaseExporter
-     */
-    private $databaseExporter;
-
-    /**
-     * @var DatabaseInitializer
-     */
-    private $databaseInitializer;
-
-    /**
-     * @var string
-     */
-    private $structureDirectory;
-
-    /**
-     * @var Application
-     */
-    private $application;
+    private DatabaseExporter $databaseExporter;
+    private DatabaseInitializer $databaseInitializer;
+    private string $structureDirectory;
+    private Application $application;
 
     /**
      * @throws Exception
@@ -77,7 +62,7 @@ class DatabaseExporterTest extends BundleTestCase
         ]));
     }
 
-    public function testDatabaseExporter()
+    public function testDatabaseExporter(): void
     {
         $this->databaseInitializer->initialize();
 
