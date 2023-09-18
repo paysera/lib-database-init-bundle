@@ -12,25 +12,25 @@ class DatabaseExporter
     /**
      * @var DatabaseExporterInterface[]
      */
-    private $exporters;
-    
+    private array $exporters;
+
     public function __construct()
     {
         $this->exporters = [];
     }
-    
+
     public function addExporter(DatabaseExporterInterface $exporter, string $name)
     {
         $this->exporters[$name] = $exporter;
     }
-    
+
     public function export(string $name = null): ProcessReport
     {
         $messages = [];
         foreach ($this->exporters as $exporterName => $exporter) {
             if ($name === null || $exporterName === $name) {
                 $exporter->export($exporterName);
-                
+
                 $message = new ProcessMessage();
                 $messages[] = $message
                     ->setType(ProcessMessage::TYPE_SUCCESS)
@@ -38,7 +38,7 @@ class DatabaseExporter
                 ;
             }
         }
-        
+
         $report = new ProcessReport();
         return $report->setMessages($messages);
     }

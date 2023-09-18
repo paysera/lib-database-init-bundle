@@ -8,15 +8,9 @@ class InitializationMessage
     const TYPE_INFO = 'info';
     const TYPE_SUCCESS = 'success';
 
-    /**
-     * @var string
-     */
-    private $message;
+    private string $message;
 
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
     public function getMessage(): string
     {

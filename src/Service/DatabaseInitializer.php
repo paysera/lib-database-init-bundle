@@ -11,7 +11,7 @@ class DatabaseInitializer
     /**
      * @var DatabaseInitializerInterface[]
      */
-    private $initializers;
+    private array $initializers;
 
     public function __construct()
     {

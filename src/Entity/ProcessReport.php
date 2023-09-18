@@ -7,12 +7,9 @@ class ProcessReport
     /**
      * @var ProcessMessage[]
      */
-    private $messages;
+    private array $messages;
 
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
     public function __construct()
     {
@@ -32,8 +29,18 @@ class ProcessReport
      */
     public function setMessages(array $messages): self
     {
-        $this->messages = $messages;
+        $this->messages = [];
+
+        foreach ($messages as $message) {
+            $this->addMessage($message);
+        }
+
         return $this;
+    }
+
+    public function addMessage(ProcessMessage $message): void
+    {
+        $this->messages[] = $message;
     }
 
     public function getName(): string

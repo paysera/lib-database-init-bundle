@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class PayseraDatabaseInitBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass((new AddTaggedCompilerPass(
             'paysera_database_init.database_initializer',
@@ -17,7 +17,7 @@ class PayseraDatabaseInitBundle extends Bundle
             'addInitializer',
             ['type']
         ))->enablePriority());
-    
+
         $container->addCompilerPass(new AddTaggedCompilerPass(
             'paysera_database_init.database_exporter',
             'paysera_database_init.exporter',

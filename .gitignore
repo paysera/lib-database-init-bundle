@@ -1,9 +1,7 @@
 /vendor/
-composer.lock*
+composer.lock
 /tests/symfony/cache/
 /tests/symfony/logs/
-/docker/mount/*
-!/docker/mount/.gitkeep
 .env
 .phpunit.result.cache
 phpunit.xml

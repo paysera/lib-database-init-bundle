@@ -15,9 +15,12 @@ use Symfony\Component\Finder\Finder;
 
 class SqlInitializer implements DatabaseInitializerInterface
 {
-    private $connection;
-    private $logger;
-    private $sqlDirectories;
+    private Connection $connection;
+    private LoggerInterface $logger;
+    /**
+     * @var string[]
+     */
+    private array $sqlDirectories;
 
     public function __construct(
         Connection $connection,
@@ -26,7 +29,11 @@ class SqlInitializer implements DatabaseInitializerInterface
     ) {
         $this->connection = $connection;
         $this->logger = $logger;
-        $this->sqlDirectories = $sqlDirectories;
+
+        $this->sqlDirectories = [];
+        foreach ($sqlDirectories as $key => $sqlDirectory) {
+            $this->addSqlDirectory($key, $sqlDirectory);
+        }
     }
 
     public function initialize(string $initializerName, string $setName = null): ?ProcessReport
@@ -146,5 +153,10 @@ class SqlInitializer implements DatabaseInitializerInterface
             ->setType(ProcessMessage::TYPE_ERROR)
             ->setMessage($exception->getMessage())
         ;
+    }
+
+    private function addSqlDirectory(string $key, string $sqlDirectory): void
+    {
+        $this->sqlDirectories[$key] = $sqlDirectory;
     }
 }

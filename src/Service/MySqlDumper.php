@@ -9,8 +9,8 @@ use Symfony\Component\Process\Process;
 
 class MySqlDumper implements SqlDumperInterface
 {
-    private $connection;
-    private $logger;
+    private Connection $connection;
+    private LoggerInterface $logger;
 
     public function __construct(Connection $connection, LoggerInterface $logger)
     {

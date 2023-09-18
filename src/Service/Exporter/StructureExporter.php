@@ -9,14 +9,8 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 class StructureExporter implements DatabaseExporterInterface
 {
-    /**
-     * @var SqlDumperInterface
-     */
-    private $dumper;
-    /**
-     * @var string
-     */
-    private $filepath;
+    private SqlDumperInterface $dumper;
+    private string $filepath;
 
     public function __construct(SqlDumperInterface $dumper, string $filepath)
     {
@@ -29,7 +23,7 @@ class StructureExporter implements DatabaseExporterInterface
      * @throws IOException
      * @throws InvalidArgumentException
      */
-    public function export(string $name)
+    public function export(string $name): void
     {
         if (!is_dir($this->filepath)) {
             throw new InvalidArgumentException('Directory does not exist');
