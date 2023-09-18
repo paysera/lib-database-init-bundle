@@ -112,7 +112,7 @@ class DatabaseExporterTest extends BundleTestCase
         $result = str_replace('VALUES (', 'VALUES(', $fileContent);
 
         $result = preg_replace(
-            '#(\'\d+-\d+-\d+ \d+:\d+:\d+\',\d+)|(\'%migration_fix%\')#',
+            '#\'\d+-\d+-\d+ \d+:\d+:\d+\',\d+#',
             '\'2023-09-08 00:00:00\',1',
             $result
         );
