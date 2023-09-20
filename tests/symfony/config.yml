@@ -29,17 +29,21 @@ doctrine:
         mappings:
             Dummy:
                 type: annotation
-                dir: '%kernel.root_dir%/Entity'
+                dir: '%kernel.project_dir%/tests/Entity'
                 prefix: Paysera\Tests\Entity
                 is_bundle: false
+doctrine_migrations:
+    migrations_paths:
+        'Application': '%kernel.project_dir%/tests/DoctrineMigrations'
+    enable_profiler: false
 
 paysera_database_init:
     directories:
         sql:
-            initial: '%kernel.root_dir%/sql'
+            initial: '%kernel.project_dir%/tests/sql'
         fixtures:
-            initial: '%kernel.root_dir%/Fixtures'
-        structure: &exported '%kernel.root_dir%/exportedSql'
+            initial: '%kernel.project_dir%/tests/Fixtures'
+        structure: &exported '%kernel.project_dir%/tests/exportedSql'
     exports:
         configuration:
             name: configuration

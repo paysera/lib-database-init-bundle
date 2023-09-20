@@ -11,28 +11,22 @@ class DatabaseInitializer
     /**
      * @var DatabaseInitializerInterface[]
      */
-    private $initializers;
+    private array $initializers;
 
     public function __construct()
     {
         $this->initializers = [];
     }
-    
-    /**
-     * @param DatabaseInitializerInterface $initializer
-     * @param string $name
-     */
+
     public function addInitializer(DatabaseInitializerInterface $initializer, string $name)
     {
         $this->initializers[$name] = $initializer;
     }
 
     /**
-     * @param string|null $initializerName
-     * @param string|null $setName
      * @return ProcessReport[]
      */
-    public function initialize($initializerName = null, $setName = null)
+    public function initialize(string $initializerName = null, string $setName = null): array
     {
         $reports = [];
         foreach ($this->initializers as $name => $initializer) {

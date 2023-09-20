@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InitDatabaseCommand extends Command
 {
-    private $initializer;
+    private DatabaseInitializer $initializer;
 
     public function __construct(DatabaseInitializer $initializer)
     {
@@ -19,7 +19,7 @@ class InitDatabaseCommand extends Command
         $this->initializer = $initializer;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('paysera:db-init:init')
@@ -29,7 +29,7 @@ class InitDatabaseCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $reports = $this->initializer->initialize(
             $input->getArgument('initializer'),
@@ -74,5 +74,7 @@ class InitDatabaseCommand extends Command
         }
         $output->writeln(sprintf('Total succeeded: <info>%s</info>', $totalSucceeded));
         $output->writeln(sprintf('Total failed: <info>%s</info>', $totalFailed));
+
+        return Command::SUCCESS;
     }
 }

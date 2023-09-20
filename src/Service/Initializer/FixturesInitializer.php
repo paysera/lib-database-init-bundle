@@ -10,9 +10,12 @@ use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 
 class FixturesInitializer implements DatabaseInitializerInterface
 {
-    private $loader;
-    private $executor;
-    private $fixturesDirectories;
+    private Loader $loader;
+    private ORMExecutor $executor;
+    /**
+     * @var string[]
+     */
+    private array $fixturesDirectories;
 
     public function __construct(
         Loader $loader,
@@ -21,10 +24,14 @@ class FixturesInitializer implements DatabaseInitializerInterface
     ) {
         $this->loader = $loader;
         $this->executor = $executor;
-        $this->fixturesDirectories = $fixturesDirectories;
+
+        $this->fixturesDirectories = [];
+        foreach ($fixturesDirectories as $key => $fixturesDirectory) {
+            $this->addFixturesDirectory($key, $fixturesDirectory);
+        }
     }
 
-    public function initialize(string $initializerName, string $setName = null)
+    public function initialize(string $initializerName, string $setName = null): ?ProcessReport
     {
         if (count($this->fixturesDirectories) === 0) {
             return null;
@@ -60,5 +67,10 @@ class FixturesInitializer implements DatabaseInitializerInterface
             ->setMessages($messages)
             ->setName($initializerName)
         ;
+    }
+
+    private function addFixturesDirectory(string $key, string $fixturesDirectory): void
+    {
+        $this->fixturesDirectories[$key] = $fixturesDirectory;
     }
 }

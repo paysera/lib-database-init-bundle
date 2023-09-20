@@ -4,19 +4,23 @@ declare(strict_types=1);
 namespace Paysera\Bundle\DatabaseInitBundle\Service\Initializer;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Exception\TableExistsException;
+use Exception;
 use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessMessage;
 use Paysera\Bundle\DatabaseInitBundle\Entity\ProcessReport;
 use Psr\Log\LoggerInterface;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 class SqlInitializer implements DatabaseInitializerInterface
 {
-    private $connection;
-    private $logger;
-    private $sqlDirectories;
+    private Connection $connection;
+    private LoggerInterface $logger;
+    /**
+     * @var string[]
+     */
+    private array $sqlDirectories;
 
     public function __construct(
         Connection $connection,
@@ -25,10 +29,14 @@ class SqlInitializer implements DatabaseInitializerInterface
     ) {
         $this->connection = $connection;
         $this->logger = $logger;
-        $this->sqlDirectories = $sqlDirectories;
+
+        $this->sqlDirectories = [];
+        foreach ($sqlDirectories as $key => $sqlDirectory) {
+            $this->addSqlDirectory($key, $sqlDirectory);
+        }
     }
 
-    public function initialize(string $initializerName, string $setName = null)
+    public function initialize(string $initializerName, string $setName = null): ?ProcessReport
     {
         if (count($this->sqlDirectories) === 0) {
             return null;
@@ -48,7 +56,7 @@ class SqlInitializer implements DatabaseInitializerInterface
 
         $messages = [];
 
-        /** @var \SplFileInfo $item */
+        /** @var SplFileInfo $item */
         foreach ($finder as $item) {
             $contents = file_get_contents($item->getRealPath());
             $contents = preg_replace('#;\s+$#m', ';', $contents);
@@ -59,13 +67,13 @@ class SqlInitializer implements DatabaseInitializerInterface
                     continue;
                 }
                 try {
-                    $this->connection->query($query);
+                    $this->connection->executeQuery($query);
                     $messages[] = $this->buildSuccessMessage($query);
                 } catch (TableExistsException $exception) {
                     $messages[] = $this->processDuplicateTable($exception);
                 } catch (DriverException $exception) {
                     $messages[] = $this->processDuplicateIndexColumnRecord($exception);
-                } catch (DBALException $exception) {
+                } catch (Exception $exception) {
                     $this->logger->warning('Got Database exception while executing SQL', [$exception]);
                     $messages[] = $this->processBaseException($exception);
                 }
@@ -79,7 +87,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         ;
     }
 
-    private function buildSuccessMessage($query)
+    private function buildSuccessMessage($query): ProcessMessage
     {
         $message = new ProcessMessage();
         return $message
@@ -88,7 +96,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         ;
     }
 
-    private function processDuplicateTable(TableExistsException $exception)
+    private function processDuplicateTable(TableExistsException $exception): ProcessMessage
     {
         $message = new ProcessMessage();
 
@@ -105,7 +113,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         return $this->processBaseException($exception);
     }
 
-    private function processDuplicateIndexColumnRecord(DriverException $exception)
+    private function processDuplicateIndexColumnRecord(DriverException $exception): ?ProcessMessage
     {
         $message = new ProcessMessage();
 
@@ -137,7 +145,7 @@ class SqlInitializer implements DatabaseInitializerInterface
         return $this->processBaseException($exception);
     }
 
-    private function processBaseException(DBALException $exception)
+    private function processBaseException(Exception $exception): ProcessMessage
     {
         $message = new ProcessMessage();
 
@@ -145,5 +153,10 @@ class SqlInitializer implements DatabaseInitializerInterface
             ->setType(ProcessMessage::TYPE_ERROR)
             ->setMessage($exception->getMessage())
         ;
+    }
+
+    private function addSqlDirectory(string $key, string $sqlDirectory): void
+    {
+        $this->sqlDirectories[$key] = $sqlDirectory;
     }
 }

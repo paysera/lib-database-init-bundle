@@ -7,12 +7,12 @@ class InitializationReport
     /**
      * @var InitializationMessage[]
      */
-    private $messages;
+    private array $messages;
 
     /**
      * @var string
      */
-    private $initializer;
+    private string $initializer;
 
     public function __construct()
     {
@@ -22,36 +22,36 @@ class InitializationReport
     /**
      * @return InitializationMessage[]
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
 
     /**
      * @param InitializationMessage[] $messages
-     *
-     * @return $this
      */
-    public function setMessages($messages)
+    public function setMessages(array $messages): self
     {
-        $this->messages = $messages;
+        $this->messages = [];
+
+        foreach ($messages as $message) {
+            $this->addMessage($message);
+        }
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getInitializer()
+    public function addMessage(InitializationMessage $message): void
+    {
+        $this->messages[] = $message;
+    }
+
+    public function getInitializer(): string
     {
         return $this->initializer;
     }
 
-    /**
-     * @param string $initializer
-     *
-     * @return $this
-     */
-    public function setInitializer($initializer)
+    public function setInitializer(string $initializer): self
     {
         $this->initializer = $initializer;
         return $this;

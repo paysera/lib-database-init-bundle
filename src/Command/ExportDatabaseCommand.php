@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExportDatabaseCommand extends Command
 {
-    private $exporter;
+    private DatabaseExporter $exporter;
 
     public function __construct(DatabaseExporter $exporter)
     {
@@ -20,7 +20,7 @@ class ExportDatabaseCommand extends Command
         $this->exporter = $exporter;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('paysera:db-init:export')
@@ -29,7 +29,7 @@ class ExportDatabaseCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $report = $this->exporter->export(
             $input->getArgument('exporter')
@@ -37,7 +37,7 @@ class ExportDatabaseCommand extends Command
 
         $totalFailed = 0;
         $totalSucceeded = 0;
-    
+
         foreach ($report->getMessages() as $message) {
             $text = null;
             if ($message->getType() === ProcessMessage::TYPE_INFO) {
@@ -70,5 +70,7 @@ class ExportDatabaseCommand extends Command
         }
         $output->writeln(sprintf('Total succeeded: <info>%s</info>', $totalSucceeded));
         $output->writeln(sprintf('Total failed: <info>%s</info>', $totalFailed));
+
+        return Command::SUCCESS;
     }
 }

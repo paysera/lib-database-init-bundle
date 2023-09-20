@@ -2,7 +2,8 @@
 
 namespace Paysera\Bundle\DatabaseInitBundle\DependencyInjection;
 
-use \InvalidArgumentException;
+use Exception;
+use InvalidArgumentException;
 use Paysera\Bundle\DatabaseInitBundle\Service\Exporter\DataExporter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,16 +21,17 @@ class PayseraDatabaseInitExtension extends Extension
 {
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        
+
         $container->setParameter('paysera_database_init.directory.sql', $config['directories']['sql']);
         $container->setParameter('paysera_database_init.directory.fixtures', $config['directories']['fixtures']);
         $container->setParameter('paysera_database_init.directory.structure', $config['directories']['structure']);
-        
+
         foreach ($config['exports'] as $key => $export) {
             $definition = new Definition(DataExporter::class);
             $definition->addTag('paysera_database_init.exporter', [
@@ -50,10 +52,10 @@ class PayseraDatabaseInitExtension extends Extension
                 $invertTablesFrom = $config['exports'][$export['invert_tables_from']]['tables'];
             }
             $definition->addArgument($invertTablesFrom);
-    
+
             $container->setDefinition(sprintf('paysera_database_init.exporter.%s', $key), $definition);
         }
-        
+
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
     }

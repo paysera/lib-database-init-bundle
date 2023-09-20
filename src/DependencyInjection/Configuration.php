@@ -15,14 +15,15 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('paysera_database_init');
+        $treeBuilder = new TreeBuilder('paysera_database_init');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
                 ->arrayNode('directories')
+                    ->isRequired()
                     ->children()
                         ->arrayNode('sql')
                             ->useAttributeAsKey('name')
@@ -36,11 +37,11 @@ class Configuration implements ConfigurationInterface
                             ->isRequired()
                         ->end()
                     ->end()
-                    ->end()
+                ->end()
                 ->arrayNode('exports')
                     ->canBeUnset()
                     ->useAttributeAsKey('key')
-                    ->prototype('array')
+                    ->arrayPrototype()
                     ->children()
                         ->scalarNode('name')->end()
                         ->arrayNode('tables')
@@ -49,9 +50,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('invert_tables_from')->end()
                         ->scalarNode('directory')->end()
+                    ->end()
                 ->end()
             ->end()
-            ->end();
         ;
 
         return $treeBuilder;

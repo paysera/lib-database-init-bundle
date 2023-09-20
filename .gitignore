@@ -3,3 +3,5 @@ composer.lock
 /tests/symfony/cache/
 /tests/symfony/logs/
 .env
+.phpunit.result.cache
+phpunit.xml

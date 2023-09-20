@@ -27,10 +27,10 @@ In your `config_dev.yml` - change table names with corresponding tables in the p
 paysera_database_init:
     directories:
         sql: 
-            initial: &initial '%kernel.root_dir%/sql/initial'
-            additional: &additional '%kernel.root_dir%/sql/additional'
+            initial: &initial '%kernel.project_dir%/sql/initial'
+            additional: &additional '%kernel.project_dir%/sql/additional'
         fixtures: 
-            main: '%kernel.root_dir%/fixtures'
+            main: '%kernel.project_dir%/fixtures'
         structure: *initial
     exports:
         configuration:
@@ -95,8 +95,23 @@ Implement `\Paysera\Bundle\DatabaseInitBundle\Service\Initializer\DatabaseInitia
 and tag your service with `paysera_database_init.initializer`, provide `priority` tag attribute.
 
 #### Run PHPUnit tests
-`docker-compose up`
-
-After that, run the tests from within the container: 
-
-`docker exec -it lib-db-init vendor/bin/phpunit`
+Starting or switching the dev environment:
+```
+bin/devenv [7.4,8.0,8.1]
+```
+Entering php container: 
+```shell
+bin/devenv enter
+```
+Install composer packages:
+```shell
+composer install
+```
+Running tests:
+```shell
+vendor/bin/phpunit
+```
+Stopping the dev environment:
+```shell
+bin/devenv stop
+```

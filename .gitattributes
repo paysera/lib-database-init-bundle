@@ -1,0 +1,6 @@
+/bin                 export-ignore
+/docker              export-ignore
+/tests               export-ignore
+/.env.dist           export-ignore
+/docker-compose.yml  export-ignore
+/phpunit.xml.dist    export-ignore
